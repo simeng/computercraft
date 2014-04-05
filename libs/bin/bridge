@@ -1,0 +1,70 @@
+-- Bridge Builder by simeng
+-- https://www.youtube.com/channel/UCUTpHr1U4fVNOavmKKIL9KA
+--
+-- Save script as: bridge
+-- Place turtle at left side of the bridge facing towards where you want the bridge
+-- Start by fueling the turtle with enough fuel to create the bridge_length * bridge_width
+-- Fill each inventory slot with the material you want the bride made out of
+-- To make a bridge 10 in length and 4 in width run: bridge 10 4
+
+local args = { ... }
+
+if #args < 1 then
+  print("bridge <length> [width]")
+  return
+end
+
+selectedSlot = 1
+
+function placeDown()
+  while turtle.getItemCount(selectedSlot) == 0 and selectedSlot < 16 do
+    selectedSlot = selectedSlot + 1
+  end
+  
+  if turtle.getItemCount(selectedSlot) == 0 then
+    exit()
+  end
+  
+  turtle.select(selectedSlot)
+  turtle.attack()
+  turtle.digDown()
+  turtle.placeDown()
+end
+
+local length = tonumber(args[1])
+local width = 4
+
+if args[2] ~= nil then
+  width = tonumber(args[2])
+end
+
+local neededFuel = length * width
+if neededFuel > turtle.getFuelLevel() then
+  print("Need at least " .. neededFuel .. " fuel units, only have " .. turtle.getFuelLevel() .. ", please refuel")
+  return
+end
+
+
+
+for i=1,length-1,1 do
+  turtle.dig()
+  turtle.forward()
+  placeDown()
+  turtle.turnRight()
+  for j=1,width-1,1 do
+    turtle.dig()
+    turtle.forward()
+    placeDown()
+  end
+  turtle.turnLeft()
+  turtle.dig()
+  turtle.forward()
+  placeDown()
+  turtle.turnLeft()
+  for j=1,width-1,1 do
+    turtle.dig()
+    turtle.forward()
+    placeDown()
+  end
+  turtle.turnRight()
+end
