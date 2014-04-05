@@ -1,0 +1,66 @@
+-- Net dump by simeng
+-- Dump APIs for connected OpenPeripheral modems to a file
+
+function hasValue(tbl, value)
+  for i, j in pairs(tbl) do
+    if j == value then
+      return true
+    end
+  end
+  return false
+end
+
+function rjoin(tbl)
+  local ret = {}
+  if tbl == nil then
+    return ""
+  end
+  for i, j in pairs(tbl) do
+    if type(j) == "table" then
+      table.insert(ret, j['name'])
+    else
+      table.insert(ret, j)
+    end
+  end
+  return table.concat(ret, ", ")
+end
+
+
+function writeMethod(out, j)
+  if j['name'] ~= nil then
+    out.writeLine("  " .. j['name'] .. " (" .. rjoin(j['args']) .. ")")
+    out.writeLine("  " .. j['description'])
+    if j['returnValue'] ~= nil then
+      out.writeLine("   Returns: " .. j['returnValue'])
+    end
+  else
+    out.writeLine("  " .. j)
+  end
+  out.writeLine()
+end
+
+local outFile = "net_explore.result"
+local net = peripheral.wrap("back")
+local peripherals = net.getNamesRemote()
+
+local out = fs.open(outFile, "w")
+
+for k, peripheral in pairs(peripherals) do
+  out.writeLine("Found peripheral: " .. peripheral)
+  out.writeLine(" Methods:")
+
+  local methods = net.getMethodsRemote(peripheral)
+
+  if hasValue(methods, "getAdvancedMethodsData") then
+    methods = net.callRemote(peripheral, "getAdvancedMethodsData")  
+  end
+
+  for i, j in pairs(methods) do
+    writeMethod(out, j)
+  end
+end
+
+out.close()
+shell.run("edit", outFile)
+
+-- fs.delete(outFile)
