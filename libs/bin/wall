@@ -1,0 +1,57 @@
+-- Wall Builder by xt
+--
+-- Save script as: wall
+
+local args = { ... }
+
+if #args < 2 then
+  print("wall <length> height")
+  return
+end
+
+selectedSlot = 1
+
+function placeDown()
+  while turtle.getItemCount(selectedSlot) == 0 and selectedSlot < 16 do
+    selectedSlot = selectedSlot + 1
+  end
+  
+  if turtle.getItemCount(selectedSlot) == 0 then
+    exit()
+  end
+  
+  turtle.select(selectedSlot)
+  turtle.place()
+end
+
+local length = tonumber(args[1])
+local height = 4
+
+if args[2] ~= nil then
+  height = tonumber(args[2])
+end
+
+local neededFuel = length * height
+if neededFuel > turtle.getFuelLevel() then
+  print("Need at least " .. neededFuel .. " fuel units, only have " .. turtle.getFuelLevel() .. ", please refuel")
+  return
+end
+
+
+
+turtle.turnRight()
+turtle.turnRight()
+for i=1,length-1 do
+  turtle.back()
+  for i=1,height-1 do
+   placeDown()
+   turtle.up()
+  end
+  placeDown()
+  turtle.back()
+  for i=1,height-1 do
+    placeDown()
+    turtle.down()
+  end
+  placeDown()
+end
