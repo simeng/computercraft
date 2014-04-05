@@ -1,0 +1,41 @@
+-- Jukebox v1 -- by simeng
+--
+-- Requires turtle to point towards
+-- Auto-Jukebox and Music Discs in
+-- slot 1-16 in turtle inventory
+
+function playRandom()
+  recordId = math.random(12)
+  playRecord(recordId)
+end
+
+function checkRecord(recordId)
+  return turtle.getItemCount(recordId) == 1
+end
+
+function playRecord(recordId)
+  turtle.select(recordId)
+  turtle.drop()
+
+  redstone.setOutput("front", true)
+  sleep(.5)
+  redstone.setOutput("front", false)
+  turtle.suck()
+end
+
+local args = { ... }
+
+if #args == 0 then
+  playRandom()
+elseif #args == 1 then
+  local recordId = tonumber(args[1])
+  if recordId > 0 and recordId < 13 then
+    if checkRecord(recordId) then
+      playRecord(recordId)
+    else
+      print("No record found in slot " .. recordId)
+    end
+  else
+    print("Requires recordId 1-12")
+  end
+end
