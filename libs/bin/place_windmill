@@ -1,0 +1,76 @@
+-- 3-branch windmill placer by simeng
+-- Load wire in slot 1 and windmills in slot 16
+
+turtle.select(1)
+
+turtle.up()
+turtle.placeDown()
+
+for i=1,9 do
+  turtle.forward()
+  turtle.placeDown()
+end
+
+turtle.forward()
+turtle.turnLeft()
+
+for i=1,10 do
+  turtle.forward()
+  turtle.placeDown()
+end
+
+turtle.up()
+turtle.placeDown()
+turtle.up()
+turtle.placeDown()
+turtle.back()
+turtle.select(16)
+turtle.place()
+turtle.select(1)
+
+turtle.turnLeft()
+turtle.turnLeft()
+
+for i=1,10 do
+  turtle.forward()
+end
+
+turtle.down()
+turtle.down()
+
+for i=1,9 do
+  turtle.placeDown()
+  turtle.forward()
+end
+
+turtle.placeDown()
+turtle.up()
+turtle.placeDown()
+turtle.up()
+turtle.placeDown()
+
+turtle.back()
+turtle.select(16)
+turtle.place()
+
+turtle.turnLeft()
+turtle.turnLeft()
+
+for i=1,9 do
+  turtle.forward()
+end
+
+turtle.turnLeft()
+turtle.back()
+turtle.place()
+
+turtle.select(1)
+turtle.down()
+turtle.place()
+turtle.down()
+turtle.place()
+turtle.down()
+turtle.place()
+
+turtle.turnLeft()
+turtle.turnLeft()
