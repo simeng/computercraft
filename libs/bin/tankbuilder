@@ -1,0 +1,273 @@
+print("Tank Builder v0.9")
+print("made by Landstryder")
+
+--Get some variables from the user
+print("Do I need to clear the area first?")
+print("y or n?")
+local cleanup = io.read()
+if cleanup=="y" or cleanup=="yes" then
+print("I will clear the area first")
+else
+print("skipping cleanup, I hope the area is clear!")
+end
+
+local base
+while base~=3 and base~=5 and base~=7 and base~=9 do
+ print("What size do you want the base? 3,5,7,9")
+ base = io.read()
+ base = tonumber(base)
+ if base~=3 and base~=5 and base~=7 and base~=9 then
+ print("not a valid selection")
+ end
+end
+
+local height=0
+while height<3 or height>8 do
+ print("How tall would you like your tank? 3-8")
+ height = io.read()
+ height = tonumber(height)
+ if height<3 or height>8 then print("not a valid selection") end
+end
+
+--Define special functions
+function wall()
+ turtle.select(1)
+ while not turtle.placeDown() do
+  for i=1,4 do
+   if i==4 then
+   print("please add tank walls to continue")
+   sleep(10)
+   else
+   turtle.select(i)
+   if turtle.placeDown() then return end
+   end
+  end
+ end
+end
+ 
+function wallrun()
+for i=1,base-1 do wall() go() end
+end
+function wallR()
+wall() right() go() right()
+end
+function wallL()
+wall() left() go() left()
+end
+function wallC()
+wall() left()
+end
+function wallB()
+if base==3 then
+go() valve() go()
+else
+for i=1,(base-3)/2 do go() gauge() end
+go() valve()
+for i=1,(base-3)/2 do go() gauge() end
+go()
+end
+end
+function wallS()
+go()
+for i=1,base-2 do gauge() go() end
+end
+
+function valve()
+ turtle.select(4)
+ while not turtle.placeDown() do
+ print("please put some valves in slot 3")
+ sleep(10)
+ end
+end
+ 
+function gauge()
+ turtle.select(5)
+ while not turtle.placeDown() do
+ for i=6,15 do
+  if i==15 then
+  print("Out of tank gauge sections. Please add more to continue.")
+  sleep(10)
+  else
+  turtle.select(i)
+  if turtle.placeDown() then return end
+  end
+ end
+ end
+end
+
+--Basic Functions
+function up(num)
+  if num == nil then num = 1 end
+  for it=1,num do
+    while not turtle.up() do turtle.digUp() end
+  end
+end
+
+function down(num)
+  if num == nil then num = 1 end
+  for it=1,num do
+    while not turtle.down() do turtle.digDown() end
+  end
+end
+
+function go(num)
+  if num == nil then num = 1 end
+  for it=1,num do
+    while not turtle.forward() do turtle.dig() end
+  end
+end
+
+function flip()
+  turtle.turnLeft()
+  turtle.turnLeft()
+end
+
+function left()
+ turtle.turnLeft()
+end
+
+function right()
+ turtle.turnRight()
+end
+
+
+--Clear the area
+if cleanup=="yes" or cleanup=="y" then
+print("clearing the core area")
+if base==3 then
+ go(2)
+ right()
+ go()
+ up(height)
+ down(height)
+ flip()
+ go()
+ left()
+ go(2)
+end
+if base==5 then
+  go(2)
+  right()
+  go()
+  up(height)
+  go()
+  down(height)
+  go()
+  up(height)
+  left()
+  go()
+  down(height)
+  left()
+  go()
+  up(height)
+  go()
+  down(height)
+  right()
+  go()
+  up(height)
+  right()
+  go()
+  down(height)
+  go()
+  up(height)
+  flip()
+  go(3)
+  left()
+  go(4)
+  down(height)
+end
+if base==7 then
+  go(2)
+  right()
+  go()
+  for it=1,2 do
+  up(height) go() down(height) go() up(height) go() down(height) go() up(height) left() go() left()
+  down(height) go() up(height) go() down(height) go() up(height) go() down(height) right() go() right()
+  end  
+  up(height) go() down(height) go() up(height) go() down(height) go() up(height) flip() go(5) left() go(6) down(height)
+end
+if base==9 then
+  go(2)
+  right()
+  go()
+  for it=1,3 do
+  for it=1,3 do
+  up(height) go() down(height) go()
+  end
+  up(height) left() go() left()
+  for it=1,3 do
+  down(height) go() up(height) go()
+  end
+  down(height) right() go() right()
+  end
+  for it=1,3 do
+  up(height) go() down(height) go()
+  end
+  up(height) flip() go(7) left() go(8) down(height)
+end
+for it=1,16 do
+turtle.select(it)
+turtle.drop()
+end
+flip()
+--clear walls area
+go()
+for it=1,height+1 do
+for it=1,4 do go(base-1) right() end
+up()
+end
+
+down(height+1) flip() go()
+for i=1,16 do 
+turtle.select(i)
+turtle.drop()
+end
+flip()
+end
+
+--Build tank code
+print("Place tank walls in slots 1-3, valves in slot 4, gauges or more walls in 5-15, then press enter to continue")
+local i = io.read()
+go()
+up()
+--start laying blocks
+function cap()
+if base == 3 then
+ wallrun() wallR() wall() go() valve() go() wallL() wallrun() wall() left()
+else
+if base == 7 then
+ wallrun() wallR() wallrun() wallL() wallrun() wallR()
+ wall() go() wall() go() wall() go() valve() go() wall() go() wall() go() wallL()
+ wallrun() wallR() wallrun() wallL() wallrun() wall()
+else
+local half=(base-1)/2
+ for it=1,half/2 do wallrun() wallR() wallrun() wallL() end
+ for it=1,half do wall() go() end
+ valve() go()
+ for it=1,half-1 do wall() go() end
+ wallR()
+ for it=1,half/2 do wallrun() wallL() wallrun() wallR() end
+right() go() right()
+end
+end
+end
+cap()
+--end of base now lay bottom layer
+up()
+for it=1,4 do wallC() wallB() end
+
+--now check for normal layers and build them
+if height>3 then
+local layers = height-3
+for it=1,layers do
+up()
+for it=1,4 do wallC() wallS() end
+end
+end
+
+-- recycle the code from the bottom to make the top
+up() flip() cap()
+
+--return to start
+go() down(height)
+print("Your tank is complete master")
