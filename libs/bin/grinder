@@ -1,0 +1,17 @@
+-- Grinder replacement by kanjaro and Antorast
+-- Put pressure plate in front and chest below
+
+while true do
+ if turtle.getItemCount(1) > 0 then
+    for n=1,16 do 
+      turtle.select(n)
+      turtle.dropDown()
+    end
+  end
+  while rs.getInput("front") do
+    turtle.attack()
+    
+    turtle.suck()
+  end
+  local event = os.pullEvent('redstone')
+end
