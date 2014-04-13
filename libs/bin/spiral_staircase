@@ -1,0 +1,46 @@
+-- spiral_staircase by simeng
+-- Makes a spiral staircase (2 wide) going up
+-- Fill inventory with wanted material
+-- Place turtle at outer radius facing clockwise 
+-- Created for a 9x9 mineshaft
+
+function place()
+  local i = 1
+  while turtle.getItemCount(i) == 0 do
+    if i > 15 then
+      sleep(5)
+      print("Plz insert mats")
+      i = 0
+    end
+    i = i + 1
+  end
+  turtle.placeDown()
+end
+
+os.loadAPI("slask/lib/slask_tscript")
+local tscript = slask_tscript
+tscript.callback("pd", place)
+
+local args = { ... }
+if #args < 1 then
+  print("Run as: spiral_staircase <num_revolutions>")
+  return
+end
+
+local height = tonumber(args[1])
+
+for j=1,height do
+  for i=1,4 do
+    tscript.run([[
+      pd r f pd
+      l u f pd
+      l f pd r
+      u f pd r
+      f pd u f pd l
+      f pd l f pd f pd
+      r r f l u f r
+      pd f pd f pd r f pd
+      l l f r u f
+    ]])
+  end
+end
