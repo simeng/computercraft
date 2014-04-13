@@ -21,6 +21,33 @@ callbacks = {
   ['dd'] = turtle.digDown
 }
 
+function findItemsBeforePlace() 
+  callback('pd', function()
+    itemInAnySlotThen(turtle.placeDown)
+  end)
+  callback('pu', function()
+    itemInAnySlotThen(turtle.placeUp)
+  end)
+  callback('pf', function()
+    itemInAnySlotThen(turtle.placeForward)
+  end)
+end
+
+function itemInAnySlotThen(cb)
+  local i = 1
+  while turtle.getItemCount(i) == 0 do
+    if i > 15 then
+      print("Need more material")
+      sleep(5)
+      i = 0
+    end
+    i = i + 1
+  end
+  if cb ~= nil then
+    cb()
+  end
+end
+
 function callback(id, callback)
   callbacks[id] = callback
 end
