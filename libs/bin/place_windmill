@@ -1,76 +1,60 @@
--- 3-branch windmill placer by simeng
--- Load wire in slot 1 and windmills in slot 16
+-- Windmill placer v2 by simeng
+-- Rewrite of the old one, this one will place a tight pattern of wiring
+-- and all you have to do manually is place the windmills 
+-- (they bugged when turtle placed them) and stuff like 
+-- batpacks, LV-transformers and MFU etc.
+-- The pattern wil expand 20 blocks radius from where turtle is placed
 
-turtle.select(1)
+os.loadAPI("slask/lib/slask_tscript")
+local tscript = slask_tscript
+tscript.findItemsBeforePlace()
 
-turtle.up()
-turtle.placeDown()
+function makeBranch(n)
+  -- for each length in branch
+  for j=n,1,-1 do
+    -- place the branch part
+    for i=1,spacing do
+      tscript.run("f pd")
+    end
+  end
 
-for i=1,9 do
-  turtle.forward()
-  turtle.placeDown()
+  -- turn around
+  tscript.run("r r")
+
+  for j=n,1,-1 do
+    -- place mount for windmill (two up)
+    tscript.run("u pd u pd f d d")
+
+    for i=1,spacing-1 do
+      tscript.run("f")
+    end
+  end
 end
 
-turtle.forward()
-turtle.turnLeft()
+spacing = 5
+length = 4
+directions = 1
 
-for i=1,10 do
-  turtle.forward()
-  turtle.placeDown()
+for direction=directions,1,-1 do
+  for t=length,1,-1 do
+    for i=1,spacing do
+      tscript.run("f pd")
+    end
+
+    tscript.run("r")
+    makeBranch(t-1)
+    tscript.run("r")
+  end
+
+  -- return home
+  tscript.run("r r")
+  for t=length,1,-1 do
+    tscript.run("u pd u pd f d d")
+    for u=1,spacing-1 do
+      tscript.run("f")
+    end
+  end
+
+  -- position for next direction
+  tscript.run("r")
 end
-
-turtle.up()
-turtle.placeDown()
-turtle.up()
-turtle.placeDown()
-turtle.back()
-turtle.select(16)
-turtle.place()
-turtle.select(1)
-
-turtle.turnLeft()
-turtle.turnLeft()
-
-for i=1,10 do
-  turtle.forward()
-end
-
-turtle.down()
-turtle.down()
-
-for i=1,9 do
-  turtle.placeDown()
-  turtle.forward()
-end
-
-turtle.placeDown()
-turtle.up()
-turtle.placeDown()
-turtle.up()
-turtle.placeDown()
-
-turtle.back()
-turtle.select(16)
-turtle.place()
-
-turtle.turnLeft()
-turtle.turnLeft()
-
-for i=1,9 do
-  turtle.forward()
-end
-
-turtle.turnLeft()
-turtle.back()
-turtle.place()
-
-turtle.select(1)
-turtle.down()
-turtle.place()
-turtle.down()
-turtle.place()
-turtle.down()
-turtle.place()
-
-turtle.turnLeft()
-turtle.turnLeft()
