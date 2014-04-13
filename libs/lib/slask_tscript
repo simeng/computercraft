@@ -43,6 +43,7 @@ function itemInAnySlotThen(cb)
     end
     i = i + 1
   end
+  turtle.select(i)
   if cb ~= nil then
     cb()
   end
