@@ -4,22 +4,9 @@
 -- Place turtle at outer radius facing clockwise 
 -- Created for a 9x9 mineshaft
 
-function place()
-  local i = 1
-  while turtle.getItemCount(i) == 0 do
-    if i > 15 then
-      sleep(5)
-      print("Plz insert mats")
-      i = 0
-    end
-    i = i + 1
-  end
-  turtle.placeDown()
-end
-
 os.loadAPI("slask/lib/slask_tscript")
 local tscript = slask_tscript
-tscript.callback("pd", place)
+tscript.findItemsBeforePlace()
 
 local args = { ... }
 if #args < 1 then
